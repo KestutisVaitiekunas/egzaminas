@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     username varchar(255) NOT NULL,
     email varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
-    role int(255) NOT NULL,
+    role int(255) NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
 
