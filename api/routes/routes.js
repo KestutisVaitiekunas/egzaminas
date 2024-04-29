@@ -5,7 +5,10 @@ const router = express.Router();
 const TestController = require('../controllers/test_controller');
 
 router.get( '/', TestController.get)
+router.get( '/id', TestController.get_by_id)
 router.post( '/', TestController.add)
+router.put( '/update', TestController.update)
+router.delete( '/delete', TestController.delete)
 
 // router.get('/', (req, res) => {
 

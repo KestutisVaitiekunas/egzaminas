@@ -1,6 +1,7 @@
 const express = require('express'); 
 const cors = require('cors');
 
+
 const mysql_db = require('./db/mysql/db');
 const mongo_db = require('./db/mongo/db');
 const example_router = require('./routes/routes');
@@ -17,7 +18,7 @@ app.use(function (req, res, next) {
 app.use('/api', example_router);
 
 app.use(cors({
-    origin: 'http://localhost:3000',//priimu requestus tik is sito adreso
+    origin: 'http://localhost:4000',//priimu requestus tik is sito adreso
     // credentials: true
   }));
 
