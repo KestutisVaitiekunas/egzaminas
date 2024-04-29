@@ -58,5 +58,18 @@ module.exports = {
         .custom((value, { req }) => {
             return value === req.body.password;
         }).withMessage("Passwords don't match"),
+    ],
+    loginValidation: [
+        body("email")
+        .trim()
+        .escape()
+        .not().isEmpty().withMessage('Email is required')
+        .isEmail().withMessage('Email must be valid'),
+        body("password")
+        .trim()
+        .escape()
+        .not().isEmpty().withMessage('Password is required')
+        .isLength({min: 8}).withMessage('Password must be at least 8 characters long')
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,20}$/).withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
     ]
 }

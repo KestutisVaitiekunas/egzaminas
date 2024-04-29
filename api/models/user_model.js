@@ -39,5 +39,5 @@ module.exports = {
     delete: async (db, id) => {
         const q = "DELETE FROM users WHERE id = ?";
         return await db.query(q, [id]);
-    }
+    },
 }

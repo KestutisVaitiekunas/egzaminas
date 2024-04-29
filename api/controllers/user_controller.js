@@ -19,7 +19,7 @@ function validationErrorMessages(errors) {
 
 
 module.exports = {
-    get: async (req, res) => {
+    get_all: async (req, res) => {
         try {
             const [assets, fields] = await UserModel.get_all(req.db);
             res.json(assets); 
@@ -83,18 +83,8 @@ module.exports = {
                 res.status(500).json({ error: 'Internal Server Error' });
             }
         } else {
-            const validation_err_messages = {}
-            const validation_messages = validation.array();
-            for (let msg of validation_messages) {
-                const key =  msg.path;
-                const value = msg.msg;
-                if (!validation_err_messages[key]) {
-                    validation_err_messages[key] = [value]
-                } else {
-                    validation_err_messages[key].push(value)
-                }
-            }
-            res.status(400).json(validation_err_messages);
+            const validation_messages = validationErrorMessages(validation.array());
+            res.status(400).json(validation_messages);
         }
     },
     update_password: async (req, res) => {
@@ -115,33 +105,51 @@ module.exports = {
                 res.status(500).json({ error: 'Internal Server Error' });
             }
         } else {
-            const validation_err_messages = {}
-            const validation_messages = validation.array();
-            for (let msg of validation_messages) {
-                const key =  msg.path;
-                const value = msg.msg;
-                if (!validation_err_messages[key]) {
-                    validation_err_messages[key] = [value]
-                } else {
-                    validation_err_messages[key].push(value)
-                }
-            }
-            res.status(400).json(validation_err_messages);
+            const validation_messages = validationErrorMessages(validation.array());
+            res.status(400).json(validation_messages);
         }
     },
     delete: async (req, res) => {
         const {id} = req.body;
         try{
-            const asset = await UserModel.get_asset_by_id(req.db, id);
-            if (asset) {
+            const user_in_db = await UserModel.get_by_id(req.db, id);
+            if (user_in_db) {
                 const deleted_user = await UserModel.delete(req.db, id);
-                res.status(200).json({data: deleted_user});
+                res.status(200).json({
+                    message: 'User deleted successfully',
+                    data: deleted_user});
             }else {
                 res.status(404).json({ error: 'Asset not found' });
             }
         }catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },
+    login: async (req, res) => {
+        const validation = validationResult(req);
+        if (validation.isEmpty()) {
+            const { email, password } = req.body;
+            try{
+                const [user_in_db] = await UserModel.get_by_email(req.db, email);
+                if (user_in_db) {
+                    const password_is_valid = await bcrypt.compare(password, user_in_db[0].password);
+                    if (password_is_valid) {
+                        // const token = jwt.sign({ id: user_in_db[0].id }, 'secret', { expiresIn: '1h' });
+                        res.status(200).json({message: 'Login successful'});
+                    } else {
+                        res.status(401).json({ error: 'Invalid password' });
+                    }
+                } else {
+                    res.status(401).json({ error: 'No user found with this email' });
+                }
+            }catch (err) {
+                console.error(err);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        } else {
+            const validation_messages = validationErrorMessages(validation.array());
+            res.status(400).json(validation_messages);
         }
     }
 }

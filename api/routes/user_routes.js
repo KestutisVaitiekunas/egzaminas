@@ -5,12 +5,14 @@ const router = express.Router();
 const UserController = require('../controllers/user_controller');
 const UserRequest = require('../requests/user_request');
 
-// router.get( '/', TestController.get)
-// router.get( '/id', TestController.get_by_id)
+router.get( '/', UserController.get_all)
+router.get( '/id', UserController.get_by_id)
 router.post( '/register', UserRequest.registerValidation, UserController.add)
 router.put( '/update', UserRequest.updateValidation, UserController.update_user)
 router.put( '/updatepassword', UserRequest.updatePasswordValidation, UserController.update_password)
-// router.delete( '/delete', TestController.delete)
+router.delete( '/delete', UserController.delete)
+router.post( '/login', UserRequest.loginValidation, UserController.login)
+
 
 // router.get('/', (req, res) => {
 
