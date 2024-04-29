@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 
 const router = express.Router();
 const TestController = require('../controllers/test_controller');
+const TestRequest = require('../requests/test_request');
 
 router.get( '/', TestController.get)
 router.get( '/id', TestController.get_by_id)
-router.post( '/', TestController.add)
+router.post( '/', TestRequest.addAssetValidation, TestController.add)
 router.put( '/update', TestController.update)
 router.delete( '/delete', TestController.delete)
 

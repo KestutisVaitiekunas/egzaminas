@@ -1,6 +1,6 @@
-
-const { get } = require('mongoose');
 const TestModel = require('../models/test_model');
+const {validationResult} = require("express-validator");
+
 
 module.exports = {
     get: async (req, res) => {
@@ -23,13 +23,34 @@ module.exports = {
         }
     },
     add: async (req, res) => {
-        //reikia validuoti duomenis
-        const validated_data = "test Name";
-        try{ 
-            const new_user = await TestModel.add(req.db, validated_data);
-            res.status(200).json({data: new_user});
-        }catch (err) {
-            res.send(err);
+        const validation = validationResult(req);
+
+        if (validation.isEmpty()) {
+            //reikia validuoti duomenis
+            // const validated_data = "test title";
+            const { name } = req.body;
+            try{ 
+                // const new_user = await TestModel.add(req.db, validated_data);
+                const new_user = await TestModel.add(req.db, name);
+                res.status(200).json({data: new_user});
+            }catch (err) {
+                console.error(err);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        } else {
+            const validation_err_messages = {}
+            const validation_messages = validation.array();
+            for (let msg of validation_messages) {
+                const key =  msg.path;
+                const value = msg.msg;
+                console.log(key,":", value);
+                if (!validation_err_messages[key]) {
+                    validation_err_messages[key] = [value]
+                } else {
+                    validation_err_messages[key].push(value)
+                }
+            }
+            res.status(400).json(validation_err_messages);
         }
     },
     update: async (req, res) => {
@@ -43,7 +64,8 @@ module.exports = {
                 res.status(404).json({ error: 'Asset not found' });
             }
         }catch (err) {
-            res.send(err);
+            console.error(err);
+            res.status(500).json({ error: 'Internal Server Error' });
         }
     },
     delete: async (req, res) => {
@@ -57,7 +79,8 @@ module.exports = {
                 res.status(404).json({ error: 'Asset not found' });
             }
         }catch (err) {
-            res.send(err);
+            console.error(err);
+            res.status(500).json({ error: 'Internal Server Error' });
         }
     }
 }
