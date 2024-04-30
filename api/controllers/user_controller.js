@@ -1,6 +1,7 @@
 const UserModel = require('../models/user_model');
 const {validationResult} = require("express-validator");
 const bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
 
 function validationErrorMessages(errors) {
     const validation_err_messages = {}
@@ -16,7 +17,6 @@ function validationErrorMessages(errors) {
     }
     return validation_err_messages
 }
-
 
 module.exports = {
     get_all: async (req, res) => {
@@ -41,14 +41,11 @@ module.exports = {
     add: async (req, res) => {
         const validation = validationResult(req);
         if (validation.isEmpty()) {
-            //reikia validuoti duomenis
-            // const validated_data = "test title";
             const { username, email, password } = req.body;
             const hashed_password = await bcrypt.hash(password, 10);
             data = { username, email, hashed_password };
             try{ 
-                // const new_user = await TestModel.add(req.db, validated_data);
-                const new_user = await UserModel.register(req.db, data);
+                const new_user = await UserModel.add(req.db, data);
                 res.status(200).json({data: new_user});
             }catch (err) {
                 console.error(err);
@@ -126,32 +123,4 @@ module.exports = {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
-    login: async (req, res) => {
-        const validation = validationResult(req);
-        if (validation.isEmpty()) {
-
-            res.status(200).json({message: req.message});
-            // const { email, password } = req.body;
-            // try{
-            //     const [user_in_db] = await UserModel.get_by_email(req.db, email);
-            //     if (user_in_db) {
-            //         const password_is_valid = await bcrypt.compare(password, user_in_db[0].password);
-            //         if (password_is_valid) {
-            //             // const token = jwt.sign({ id: user_in_db[0].id }, 'secret', { expiresIn: '1h' });
-            //             res.status(200).json({message: 'Login successful'});
-            //         } else {
-            //             res.status(401).json({ error: 'Invalid password' });
-            //         }
-            //     } else {
-            //         res.status(401).json({ error: 'No user found with this email' });
-            //     }
-            // }catch (err) {
-            //     console.error(err);
-            //     res.status(500).json({ error: 'Internal Server Error' });
-            // }
-        } else {
-            const validation_messages = validationErrorMessages(validation.array());
-            res.status(400).json(validation_messages);
-        }
-    }
 }

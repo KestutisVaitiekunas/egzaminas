@@ -15,7 +15,13 @@ CREATE TABLE IF NOT EXISTS users (
     role int(255) NOT NULL DEFAULT 1,
     PRIMARY KEY (id)
 );
-
+CREATE TABLE IF NOT EXISTS tokens (
+    id int(11) NOT NULL AUTO_INCREMENT,
+    token varchar(255) NOT NULL,
+    user_id int(11) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 INSERT INTO assets (title) VALUES ('test_asset');
 
 

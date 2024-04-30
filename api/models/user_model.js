@@ -12,7 +12,7 @@ module.exports = {
         const q = "SELECT * FROM users WHERE email = ?";
         return await db.query(q, [id]);
     },
-    register: async (db, data) => {
+    add: async (db, data) => {
         const q = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
         const result = await db.query(q, [
             data.username,
