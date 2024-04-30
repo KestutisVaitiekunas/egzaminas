@@ -1,5 +1,7 @@
 const express = require('express'); 
 const cors = require('cors');
+const passport = require('passport');
+
 
 
 const mysql_db = require('./db/mysql/db');
@@ -16,6 +18,9 @@ app.use(function (req, res, next) {
   // req.db = mongo_db;
   next();
 });
+
+app.use(passport.initialize());
+
 app.use('/api', test_router);
 app.use('/api/user', user_router);
 
