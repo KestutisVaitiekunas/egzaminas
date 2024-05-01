@@ -1,10 +1,10 @@
-
+import RegisterForm from "../components/forms/register_form"
 
 const Register = (props) => {
 
     return (
         <div>
-            <h1>Register page</h1>
+            <RegisterForm />
         </div>
     )
 }
