@@ -21,7 +21,6 @@ function validationErrorMessages(errors) {
     return validation_err_messages
 }
 
-
 const loginStrategy = new LocalStrategy(
     { usernameField: 'email', passwordField: 'password', passReqToCallback: true },
     async (req, email, password, done) => {

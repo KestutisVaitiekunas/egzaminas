@@ -1,6 +1,15 @@
-
 module.exports = {
-    get_token: async (db) => {
+    register_user: async (db, data) => {
+        const q = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        const result = await db.query(q, [
+            data.username,
+            data.email,
+            data.hashed_password,
+        ]);
+        if (result) return result;
+        else return false;
+    },
+    get_all_tokens: async (db) => {
         const q = "SELECT * FROM tokens";
         return await db.query(q);
     },
@@ -13,16 +22,6 @@ module.exports = {
         const result = await db.query(q, [
             data.token,
             data.user_id
-        ]);
-        if (result) return result;
-        else return false;
-    },
-    register_user: async (db, data) => {
-        const q = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-        const result = await db.query(q, [
-            data.username,
-            data.email,
-            data.hashed_password,
         ]);
         if (result) return result;
         else return false;
