@@ -13,6 +13,10 @@ module.exports = {
         const q = "SELECT * FROM tokens";
         return await db.query(q);
     },
+    get_token: async (db, token) => {
+        const q = "SELECT * FROM tokens WHERE token = ?";
+        return await db.query(q, [token]);
+    },
     get_token_by_user_id: async (db, id) => {
         const q = "SELECT * FROM tokens WHERE user_id = ?";
         return await db.query(q, [id]);

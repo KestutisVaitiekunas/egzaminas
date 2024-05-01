@@ -61,7 +61,7 @@ const passport_authenticate = () => {
                 res.status(200).json({
                     login_status: true, 
                     data: {
-                        token: token, 
+                        token: "Bearer " + token, 
                         user: {
                             id: user.id, 
                             username: user.username
