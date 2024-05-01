@@ -7,7 +7,8 @@ const AuthRequest = require('../requests/auth_request');
 const LoginAuthenticate = require('../strategys/login');
 const RegisterAuthenticate = require('../strategys/register');
 
-router.post( '/register', AuthRequest.registerValidation, RegisterAuthenticate(), AuthController.register)
+router.post( '/register', AuthRequest.registerValidation, RegisterAuthenticate())
+// router.post( '/register', AuthRequest.registerValidation, RegisterAuthenticate(), AuthController.register)
 router.post( '/login', AuthRequest.loginValidation, LoginAuthenticate())
 // router.post( '/login', AuthRequest.loginValidation, LoginAuthenticate(), AuthController.login)
 

@@ -37,7 +37,7 @@ const loginStrategy = new LocalStrategy(
             }
             return done(null, user, { message: 'Logged in successfully' });
         } catch (error) {
-            return done(error, false, { message: 'Internal server error' });
+            return done(error, false, { message: 'Internal server error', data: error });
         }
     }
 );
