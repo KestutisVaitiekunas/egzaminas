@@ -4,9 +4,11 @@ import "../../App.css"
 const PasswordInput = (props) => {
 
     const [type, setType] = useState("password")
-
-    function handleClick() {
+    function changeType() {
         setType(type === "password" ? "text" : "password")
+    }
+    function handleValueChange(e) {
+        props.value(e.target.value)
     }
 
     return (
@@ -14,12 +16,14 @@ const PasswordInput = (props) => {
                 <input 
                     type={type} 
                     className="form-control form-control-sm border-0 px-0 pb-0 fs-5" 
-                    id="floatingInput" 
-                    placeholder="name@example.com">                       
+                    id={props.id} 
+                    onChange={handleValueChange}
+                    placeholder='Enter your password'
+                    >                       
                 </input>
-                <label className="ps-0" for="floatingInput"><i className="bi bi-key"></i> {props.label}</label>
-                {type === "password" && <i className="bi bi-eye mt-4" onClick={handleClick}></i>}
-                {type === "text" && <i className="bi bi-eye-slash mt-4" onClick={handleClick}></i>}
+                <label className="ps-0" htmlFor={props.id}><i className="bi bi-key"></i> {props.label}</label>
+                {type === "password" && <i className="bi bi-eye mt-4" onClick={changeType}></i>}
+                {type === "text" && <i className="bi bi-eye-slash mt-4" onClick={changeType}></i>}
         </div>
     )
 }
