@@ -37,8 +37,8 @@ module.exports = {
             data.user_id
         ]);
     },
-    delete_token: async (db, id) => {
-        const q = "DELETE FROM tokens WHERE user_id = ?";
-        return await db.query(q, [id]);
+    delete_token: async (db, token) => {
+        const q = "DELETE FROM tokens WHERE token = ?";
+        return await db.query(q, [token]);
     },
 }
