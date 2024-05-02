@@ -11,7 +11,7 @@ const bearerstrategy = new BearerStrategy(
             if (!token_in_db) return done(null, false, { message: 'Access denied' });
             return done(null, token_in_db.user_id);
         } catch (error) {
-            console.log(error, false, { message: 'Internal server error', data: error });
+            return done(error, false, { message: 'Internal server error', data: error });
         }
     }
 );
@@ -21,9 +21,9 @@ passport.use('bearer', bearerstrategy);
 const passport_authenticate = () => {
     return (req, res, next) => {
         passport.authenticate('bearer', { session: false }, (err, user, info) => {
-            console.log(err);
-            console.log(user);
-            console.log(info);
+            // console.log(err);
+            // console.log(user);
+            // console.log(info);
             if (err) return res.status(500).json({ auth_status: false, data: { message: info } });
             if (!user) {
                 const parsed_info = info.split(",")[2].split("=")[1].replace(/\"/g, '');

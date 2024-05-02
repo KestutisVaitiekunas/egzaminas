@@ -1,12 +1,6 @@
-import { useEffect } from "react";
 import "../../App.css"
 
 const UsernameInput = (props) => {
-
-    // useEffect(() => {
-    //     console.log(props.validationErrors);
-    // })
-
     function handleValueChange(event) {
         props.value(event.target.value);
     }
@@ -24,7 +18,7 @@ const UsernameInput = (props) => {
                 <label className="px-0" htmlFor="usernameInput" ><i className="bi bi-person"></i> Username</label>
             </div>
             {props.validationErrors  && props.validationErrors.map(
-                (error) => <p className="form-error  text-danger mb-0">{error}</p>
+                (error, index) => <p key={index} className="form-error  text-danger mb-0">{error}</p>
             )}
         </div>
     )

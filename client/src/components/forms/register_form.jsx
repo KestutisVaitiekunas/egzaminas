@@ -4,8 +4,10 @@ import EmailInput from '../inputs/email';
 import PasswordInput from '../inputs/password';
 import UsernameInput from '../inputs/username';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = (props) => {
+    const navigate = useNavigate();
 
     const [usernameValue, setUsernameValue] = useState("");
     const [emailValue, setEmailValue] = useState("");
@@ -24,6 +26,11 @@ const RegisterForm = (props) => {
 
 
     async function handleSubmit(e) {
+
+        setUsernameErrors([]);
+        setEmailErrors([]);
+        setPasswordErrors([]);
+        setPassConfirmErrors([]);
         e.preventDefault();
         try {
             const payload = { 
@@ -34,9 +41,11 @@ const RegisterForm = (props) => {
             }
             const response = await Axios.post( 'http://localhost:4000/api/auth/register', payload );
             const data = response.data.data
+            // console.log(data)
             if ("token" in data) {
-                localStorage.setItem("Access_token", data.token)
+                await localStorage.setItem("Access_token", data.token)
             }
+            navigate('/profile');
         } catch (error) {
             const errors = error.response.data.data.message
             // console.log(errors)
@@ -46,7 +55,6 @@ const RegisterForm = (props) => {
             errors.hasOwnProperty('confirm_password') ? setPassConfirmErrors(errors.confirm_password) : setPassConfirmErrors([]);
         }
     }
-    // console.log(usernameErrors, emailErrors, passwordErrors, passConfirmErrors);
 
     return (
         <div className='login-form border rounded-3 d-flex flex-column aline-items-center mx-auto pt-4 px-5'>

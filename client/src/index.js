@@ -13,6 +13,7 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Admin from './pages/admin_dash';
 import Error from './pages/error';
+import UserProfilePage from './pages/user_profile_page';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
       <Route path="/register" element={<Register />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/error" element={<Error />} />
+      <Route path="/profile/:id" element={<UserProfilePage />} />
     </>
   )
 )
