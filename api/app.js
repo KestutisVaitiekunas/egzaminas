@@ -5,6 +5,8 @@ const mysql_db = require('./db/mysql/db');
 
 const app = express();
 
+app.use(cors());
+
 const test_router = require('./routes/test_routes');
 const user_router = require('./routes/user_routes');
 const auth_router = require('./routes/auth_routes');
@@ -24,10 +26,6 @@ app.use('/api', test_router);
 app.use('/api/user', user_router);
 app.use('/api/auth', auth_router);
 
-app.use(cors({
-    origin: 'http://localhost:3000',//priimu requestus tik is sito adreso
-    // credentials: true
-  }));
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`)

@@ -1,3 +1,4 @@
+import Axios from 'axios';
 import '../../App.css';
 import EmailInput from '../inputs/email';
 import PasswordInput from '../inputs/password';
@@ -11,23 +12,56 @@ const RegisterForm = (props) => {
     const [passwordValue, setPasswordValue] = useState("");
     const [passConfirmValue, setPassConfirmValue] = useState("");
 
+    const [usernameErrors, setUsernameErrors] = useState([]);
+    const [emailErrors, setEmailErrors] = useState([]);
+    const [passwordErrors, setPasswordErrors] = useState([]);
+    const [passConfirmErrors, setPassConfirmErrors] = useState([]);
+
     function handleUsernameValue(value) {setUsernameValue(value)};
     function handleEmailValue(value) {setEmailValue(value)};
     function handlePasswordValue(value) {setPasswordValue(value)};
     function handlePassConfirmValue(value) {setPassConfirmValue(value)};
 
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        console.log(usernameValue, emailValue, passwordValue, passConfirmValue)
+        try {
+            const payload = { 
+                username: usernameValue, 
+                email: emailValue, 
+                password: passwordValue, 
+                confirm_password: passConfirmValue 
+            }
+            const response = await Axios.post( 'http://localhost:4000/api/auth/register', payload );
+            const data = response.data.data
+            if ("token" in data) {
+                localStorage.setItem("Access_token", data.token)
+            }
+        } catch (error) {
+            const errors = error.response.data.data.message
+            // console.log(errors)
+            errors.hasOwnProperty('username') ? setUsernameErrors(errors.username) : setUsernameErrors([])
+            errors.hasOwnProperty('email') ? setEmailErrors(errors.email) : setEmailErrors([]);
+            errors.hasOwnProperty('password') ? setPasswordErrors(errors.password) : setPasswordErrors([]);
+            errors.hasOwnProperty('confirm_password') ? setPassConfirmErrors(errors.confirm_password) : setPassConfirmErrors([]);
+        }
     }
+    // console.log(usernameErrors, emailErrors, passwordErrors, passConfirmErrors);
 
     return (
         <div className='login-form border rounded-3 d-flex flex-column aline-items-center mx-auto pt-4 px-5'>
-            <UsernameInput value={handleUsernameValue} />
-            <EmailInput value={handleEmailValue}/>
-            <PasswordInput label="Password" value={handlePasswordValue} id="passwordInput"/>
-            <PasswordInput label="Password confirmation" value={handlePassConfirmValue} id="passConfirmInput"/>
+            <UsernameInput value={handleUsernameValue} validationErrors={usernameErrors}/>
+            <EmailInput value={handleEmailValue} validationErrors={emailErrors}/>
+            <PasswordInput 
+                label="Password" 
+                value={handlePasswordValue} 
+                id="passwordInput" 
+                validationErrors={passwordErrors}/>
+            <PasswordInput 
+                label="Password confirmation" 
+                value={handlePassConfirmValue} 
+                id="passConfirmInput" 
+                validationErrors={passConfirmErrors}/>
             <button 
                 type="submit" 
                 className="btn btn-primary btn-sm rounded-pill mx-auto my-4 w-auto px-4"

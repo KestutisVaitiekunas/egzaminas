@@ -31,7 +31,7 @@ const localStrategy = new LocalStrategy(
                 // const data = { username: req.body.username, email, password };
                 return done(null, false);
             }
-            return done(null, user, { message: {path: "email", text:'User with this email already exists.'}});
+            return done(null, user, { message: {"email":["User with this email already exists."]}});
         } catch (error) {
             return done(error, false, { message: 'Internal server error', data: error });
         }
@@ -75,7 +75,7 @@ const passport_authenticate = () => {
                 };
             } else {
                 const validation_messages = validationErrorMessages(validation.array());
-                res.status(400).json(validation_messages);
+                res.status(400).json({login_status: false, data: {message: validation_messages}});
             }
 
         })( req, res, next );

@@ -28,11 +28,11 @@ const loginStrategy = new LocalStrategy(
             let [user] = await UserModel.get_by_email(req.db, email);
             user = user[0];
             if (!user) {
-                return done(null, false, { message: {path: "email", text:'No user with this email.'}});
+                return done(null, false, { message: {"email":['No user with this email.']}});
             }
             const passwordIsValid = await bcrypt.compare(password, user.password);
             if (!passwordIsValid) {
-                return done(null, false, { message: {path: "password", text:'Incorrect password.'}});
+                return done(null, false, { message: {"password":['Incorrect password.']}});
             }
             return done(null, user, { message: 'Logged in successfully' });
         } catch (error) {
@@ -70,7 +70,7 @@ const passport_authenticate = () => {
                 });
             } else {
                 const validation_messages = validationErrorMessages(validation.array());
-            res.status(400).json(validation_messages);
+                res.status(400).json({login_status: false, data: {message: validation_messages}});
             }
         })( req, res, next );
     }

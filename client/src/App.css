@@ -21,6 +21,10 @@ input:-webkit-autofill:active{
     box-shadow: none;
     background-color: white!important;
 }
+.form-error {
+    color: red;
+    font-size: 0.8rem;
+}
 
 
 
