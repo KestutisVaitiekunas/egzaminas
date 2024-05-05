@@ -3,12 +3,13 @@ import Axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
-const Admin = (props) => {
+const Profile = (props) => {
     const navigate = useNavigate()
     const params = useParams();
 
-    const [user, setUser] = useState({})
-    const [authorized, setAuthorized] = useState(false)
+    const [user, setUser] = useState({});
+    const [authorized, setAuthorized] = useState(false);
+    const [ isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('Access_token') ?? "Bearer null"
@@ -19,13 +20,15 @@ const Admin = (props) => {
                 })
                 console.log(response.data.data)
                 if (response.data.data.user_id  !== params.id * 1) {
+                // if (response.data.data.user_id  !== params.id * 1) {
                     console.log("wrong user");  
                 } else {
+                    if (response.data.data.role === 0) setIsAdmin(true)
                     setAuthorized(true)
                     setUser(response.data.data)
                 }
             } catch (error) {
-                // console.log(error)
+                console.log(error)
                 setAuthorized(false)
                 setUser({})
                 // navigate('/login')
@@ -52,8 +55,9 @@ const Admin = (props) => {
             {authorized && <p>User: {user.user_id}</p>}
             {authorized && <button onClick={handleLogout}>Logout</button>}
             {!authorized && <button onClick={() => navigate('/login')}>Login</button>}
+            {isAdmin && <button onClick={() => navigate('/admin')}>Admin Dashboard</button>}
         </div>
     )
 }
 
-export default Admin
+export default Profile

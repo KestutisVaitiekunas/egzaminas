@@ -45,7 +45,7 @@ const RegisterForm = (props) => {
             if ("token" in data) {
                 await localStorage.setItem("Access_token", data.token)
             }
-            navigate('/profile');
+            navigate(`/profile/${ data.user.id }`);
         } catch (error) {
             const errors = error.response.data.data.message
             // console.log(errors)

@@ -1,7 +1,7 @@
 
 module.exports = {
     get_all: async (db) => {
-        const q = "SELECT * FROM users";
+        const q = "SELECT * FROM users ORDER BY username DESC";
         return await db.query(q);
     },
     get_by_id: async (db, id) => {
@@ -9,7 +9,7 @@ module.exports = {
         return await db.query(q, [id]);
     },
     get_by_email: async (db, id) => {
-        const q = "SELECT * FROM users WHERE email = ?";
+        const q = "SELECT * FROM users WHERE email = ? LIMIT 1";
         return await db.query(q, [id]);
     },
     add: async (db, data) => {

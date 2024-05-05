@@ -66,7 +66,8 @@ const passport_authenticate = () => {
                             token: "Bearer " + token,  
                             user: {
                                 id: new_user.insertId, 
-                                username: data.username
+                                username: new_user.username,
+                                // role: new_user.role
                             }
                         }
                     });

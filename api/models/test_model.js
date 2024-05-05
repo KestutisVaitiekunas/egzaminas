@@ -5,7 +5,7 @@ module.exports = {
         return await db.query(q);
     },
     get_asset_by_id: async (db, id) => {
-        const q = "SELECT * FROM assets WHERE id = ?";
+        const q = "SELECT * FROM assets WHERE id = ? LIMIT 1";
         return await db.query(q, [id]);
     },
     add: async (db, name) => {
