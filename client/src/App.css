@@ -25,6 +25,14 @@ input:-webkit-autofill:active{
     color: red;
     font-size: 0.8rem;
 }
+.dotted {
+    border: 1px grey !important;
+    border-style: dotted !important;
+}
+.dropzone {
+    border: 2px dotted grey;
+    border-radius: 5px;
+}
 
 
 

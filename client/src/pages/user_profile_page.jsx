@@ -1,15 +1,16 @@
 import { useEffect, useState} from "react"
 import Axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import AddAssetForm from '../components/forms/add_asset_form'
 
 const Profile = (props) => {
     const navigate = useNavigate()
-    const params = useParams();
+    const params  = useParams();
 
     const [user, setUser] = useState({});
     const [authorized, setAuthorized] = useState(false);
     const [ isAdmin, setIsAdmin] = useState(false);
+    const [ showForm, setShowForm] = useState(false)
 
     useEffect(() => {
         const token = localStorage.getItem('Access_token') ?? "Bearer null"
@@ -48,14 +49,19 @@ const Profile = (props) => {
         } catch (error) {
             console.log(error)
         }
+    };
+    const handleShowForm = () => {
+        !showForm ? setShowForm(true) : setShowForm(false)
     }
     return (
         <div>
             <h1>User profile page</h1>
             {authorized && <p>User: {user.user_id}</p>}
             {authorized && <button onClick={handleLogout}>Logout</button>}
+            {authorized && <button onClick={handleShowForm}>Add asset</button>}
             {!authorized && <button onClick={() => navigate('/login')}>Login</button>}
             {isAdmin && <button onClick={() => navigate('/admin')}>Admin Dashboard</button>}
+            {showForm && <AddAssetForm />}
         </div>
     )
 }
