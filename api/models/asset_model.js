@@ -8,9 +8,9 @@ module.exports = {
         const q = "SELECT * FROM assets WHERE id = ? LIMIT 1";
         return await db.query(q, [id]);
     },
-    add: async (db, name) => {
-        const q = "INSERT INTO assets (title) VALUES (?)";
-        const result = await db.query(q, [name]);
+    add: async (db, data) => {
+        const q = "INSERT INTO assets (title, user_id) VALUES (?, ?)";
+        const result = await db.query(q, [data.title, data.id]);
         if (result) return result;
         else return false;
     },

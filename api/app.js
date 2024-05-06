@@ -2,12 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
 const mysql_db = require('./db/mysql/db');
+const multer = require('multer');
 
 const app = express();
 
 app.use(cors());
+app.use(multer({ dest: "uploads/" }).any());
 
-const test_router = require('./routes/test_routes');
+const asset_router = require('./routes/asset_routes');
 const user_router = require('./routes/user_routes');
 const auth_router = require('./routes/auth_routes');
 
@@ -22,7 +24,7 @@ app.use(function (req, res, next) {
 
 app.use(passport.initialize());
 
-app.use('/api', test_router);
+app.use('/api/asset', asset_router);
 app.use('/api/user', user_router);
 app.use('/api/auth', auth_router);
 
