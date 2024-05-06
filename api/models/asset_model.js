@@ -20,6 +20,11 @@ module.exports = {
         if (result) return result;
         else return false;
     },
+    update_image: async (db, id, path) =>{
+        const q = "UPDATE assets SET image = ? WHERE id = ?";
+        return await db.query(q, [path, id]);
+      },
+    
     delete: async (db, id) => {
         const q = "DELETE FROM assets WHERE id = ?";
         const result = await db.query(q, [id]);

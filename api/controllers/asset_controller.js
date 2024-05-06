@@ -1,5 +1,8 @@
 const AssetModel = require('../models/asset_model');
 const {validationResult} = require("express-validator");
+const fs = require('node:fs/promises');
+const path = require('node:path');
+
 
 function validationErrorMessages(errors) {
     const validation_err_messages = {}
@@ -40,12 +43,22 @@ module.exports = {
         const validation = validationResult(req);
 
         if (validation.isEmpty()) {
-            console.log(req.body);
-            console.log(req.files);
+            // console.log(req.body);
+            // console.log(req.files);
             const data = req.body;
             try{ 
+                const clientPublicFolder = path.resolve(__dirname, '..', '..','client', 'public', 'images', 'assets');
+                const ext = {"image/webp": ".webp", "image/png": ".png", "image/jpeg": ".jpg", "image/jpg": ".jpg"};
                 const new_asset = await AssetModel.add(req.db, data);
-                res.status(200).json({data: new_asset});
+                const file_name = new_asset[0].insertId + '_' + data.id + '_' + req.files[0].filename.slice(0, 6) + ext[req.files[0].mimetype];
+                await AssetModel.update_image(req.db, new_asset[0].insertId, file_name);
+                fs.rename(req.files[0].path, clientPublicFolder + file_name, (err) => {
+                    console.error('Error renaming/moving file:', err);
+                    return res.status(500).send('Error renaming/moving file');
+                })
+
+
+                res.status(200).json({data: "Asset added successfully"});
             }catch (err) {
                 console.error(err);
                 res.status(500).json({ error: 'Internal Server Error' });
