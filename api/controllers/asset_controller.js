@@ -56,8 +56,6 @@ module.exports = {
                     console.error('Error renaming/moving file:', err);
                     return res.status(500).send('Error renaming/moving file');
                 })
-
-
                 res.status(200).json({data: "Asset added successfully"});
             }catch (err) {
                 console.error(err);

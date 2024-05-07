@@ -12,6 +12,16 @@ const mysql_db = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
   });
+
+  mysql_db.getConnection((err, connection) => {
+    if (err) {
+        console.error('Error connecting to MySQL:', err);
+    } else {
+        console.log('Connected to MySQL database');
+        // Release the connection
+        connection.release();
+    }
+  }); 
   
   module.exports = mysql_db;
   

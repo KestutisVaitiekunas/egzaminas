@@ -34,6 +34,7 @@ const RegisterForm = (props) => {
             }
             navigate(`/profile/${data.user.id}`);
         } catch (error) {
+            console.log(error);
             const errors = error.response.data.data.message
             errors.hasOwnProperty('email') && setEmailErrors(errors.email);
             errors.hasOwnProperty('password') && setPasswordErrors(errors.password);

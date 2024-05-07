@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_HOST: 127.0.0.1
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_DATABASE: example_test
+      MYSQL_PASSWORD: root
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - '4000:4000'
+    depends_on:
+      - mysql
+    environment:
+      DATABASE_URL: mysql://root:root@mysql:3306/example_test
+      PORT: 4000
+      HOST: 0.0.0.0
+      NODE_ENV: production
+      MYSQL_ROOT_HOST: 127.0.0.1
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_DATABASE: example_test
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./api:/app
+
+  client:
+    build: ./client
+    restart: always
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    volumes:
+      - ./client:/app
+
+  nginx:
+    restart: always
+    depends_on:
+      - api
+      - client
+    build: ./nginx
+    ports:
+      - 8080:80
+      
+volumes:
+  mysql-data: 
