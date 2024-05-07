@@ -9,11 +9,11 @@ module.exports = {
         return await db.query(q, [id]);
     },
     add: async (db, data) => {
-        const q = "INSERT INTO events (title, time, location, image, categories_id, users_id) VALUES (?, ?, ?, ?, ?, ?)";
+        const q = "INSERT INTO events (title, location, description, image, categories_id, users_id) VALUES (?, ?, ?, ?, ?, ?)";
         const result = await db.query(q, [
             data.title,
-            data.time,
             data.location,
+            data.description,
             data.image,
             data.categories_id,
             data.users_id,

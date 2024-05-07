@@ -9,71 +9,78 @@ import Calendar from 'react-calendar'
 
 const AddEventForm = (props) => {
     const navigate = useNavigate();
+
     const params  = useParams();
 
+    const [categories, setCategories] = useState([]);
+    const [selectedValue, setSelectedValue] = useState("");
+
     const [titleValue, setTitleValue] = useState("");
-    // const [emailValue, setEmailValue] = useState("");
+    const [descriptionValue, setDescriptionValue] = useState("");
+    const [locationValue, setLocationValue] = useState("");
 
     const [files, setFiles] = useState([]);
 
     const [titleErrors, setTitleErrors] = useState([]);
-    // const [emailErrors, setEmailErrors] = useState([]);
+    const [descriptionErrors, setDescriptionErrors] = useState([]);
+    const [locationErrors, setLocationErrors] = useState([]);
 
     function handleTitleValue(value) {setTitleValue(value)};
-    // function handleEmailValue(value) {setEmailValue(value)};
+    function handleDescriptionValue(value) {setDescriptionValue(value)};
+    function handleLocationValue(value) {setLocationValue(value)};
 
 
     async function handleSubmit(e) {
 
         setTitleErrors([]);
-        // setEmailErrors([]);
+        setDescriptionErrors([]);
+        setLocationErrors([]);
         e.preventDefault();
 
-        console.log(files);
         const formData = new FormData();
+        formData.append('category_id', selectedValue);
         formData.append('id', params.id);
         formData.append('title', titleValue);
-        // formData.append('description', descriptionValue);
+        formData.append('description', descriptionValue);
         formData.append('file', files[0]);
-        for (let entry of formData.entries()) {
-            console.log(entry);
-          }
         try {
-            const response = await Axios.post( 'http://localhost:4000/api/asset', formData, {
+            const response = await Axios.post( 'http://localhost:4000/api/event', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             } );
-            console.log(response.data);
         } catch ( error ) {
             const errors = error.response.data
-            console.log(errors)
             errors.hasOwnProperty('title') && setTitleErrors(errors.title)
-            // errors.hasOwnProperty('email') ? setEmailErrors(errors.email) : setEmailErrors([]);
+            errors.hasOwnProperty('location') && setTitleErrors(errors.title)
+            errors.hasOwnProperty('description') && setTitleErrors(errors.title)
         }
     }
 
     useEffect (() => {
-        try {
-            const response = Axios.get( 'http://localhost:4000/api/event/categories' );
-            console.log(response);
-        } catch ( error ) {
-            console.log(error)
+        const getCategories = async () => {
+            try {
+                const response = await Axios.get( 'http://localhost:4000/api/event/categories' );
+                setCategories(response.data.data)
+            } catch ( error ) {
+                console.log(error)
+            }
         }
+        getCategories()
     },[])
+
+    const handleChange = (event) => {
+        setSelectedValue(event.target.value);
+    };
     return (
         <div className='login-form border rounded-3 d-flex flex-column aline-items-center mx-auto pt-4 px-5'>
             <TextInput value={handleTitleValue} validationErrors={titleErrors} label="Title"/>
-            <TextInput value={handleTitleValue} validationErrors={titleErrors} label="Location"/>
-            <select className="form-select" aria-label="Default select example">
-
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <TextInput value={handleLocationValue} validationErrors={locationErrors} label="Location"/>
+            <select className="form-select" aria-label="Default select example" value={selectedValue} onChange={handleChange}>
+                {categories.map( (category, index) => <option key={index} value={category._id}>{category.name}</option>)}
             </select>
             {/* <Calendar /> */}
-            {/* <DescriptionInput value={handleEmailValue} validationErrors={emailErrors} label="Description"/> */}
+            <DescriptionInput value={handleDescriptionValue} validationErrors={descriptionErrors} label="Description"/>
             <FileInput  onFileChange={(files) => setFiles(files)}/>
             <button 
                 type="submit" 

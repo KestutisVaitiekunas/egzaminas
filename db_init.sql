@@ -53,7 +53,6 @@ VALUES
 CREATE TABLE IF NOT EXISTS `renginiai`.`events` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NOT NULL,
-  `time` DATE NOT NULL,
   `location` VARCHAR(45) NOT NULL,
   `image` VARCHAR(45) NOT NULL,
   `users_id` INT UNSIGNED NULL,

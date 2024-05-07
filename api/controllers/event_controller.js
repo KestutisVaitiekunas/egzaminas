@@ -47,9 +47,9 @@ module.exports = {
             try{ 
                 const clientPublicFolder = path.resolve(__dirname, '..', '..','client', 'public', 'images', 'assets');
                 const ext = {"image/webp": ".webp", "image/png": ".png", "image/jpeg": ".jpg", "image/jpg": ".jpg"};
-                const new_asset = await AssetModel.add(req.db, data);
-                const file_name = new_asset[0].insertId + '_' + data.id + '_' + req.files[0].filename.slice(0, 6) + ext[req.files[0].mimetype];
-                await AssetModel.update_image(req.db, new_asset[0].insertId, file_name);
+                const new_event = await EventModel.add(req.db, data);
+                const file_name = new_event[0].insertId + '_' + data.id + '_' + req.files[0].filename.slice(0, 6) + ext[req.files[0].mimetype];
+                await AssetModel.update_image(req.db, new_event[0].insertId, file_name);
                 fs.rename(req.files[0].path, clientPublicFolder + file_name, (err) => {
                     console.error('Error renaming/moving file:', err);
                     return res.status(500).send('Error renaming/moving file');
