@@ -2,7 +2,7 @@ const { param, body, validationResult } = require("express-validator");
 const { escape } = require("../db/mysql/db");
 
 module.exports = {
-    addAssetValidation:[
+    addEventValidation:[
         body('title')
         .trim()
         .escape()

@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(multer({ dest: "uploads/" }).any());
 
-const asset_router = require('./routes/asset_routes');
+const event_router = require('./routes/event_routes');
 const user_router = require('./routes/user_routes');
 const auth_router = require('./routes/auth_routes');
 
@@ -24,7 +24,7 @@ app.use(function (req, res, next) {
 
 app.use(passport.initialize());
 
-app.use('/api/asset', asset_router);
+app.use('/api/event', event_router);
 app.use('/api/user', user_router);
 app.use('/api/auth', auth_router);
 
