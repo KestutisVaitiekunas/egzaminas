@@ -18,11 +18,11 @@ module.exports = {
         return await db.query(q, [token]);
     },
     get_token_by_user_id: async (db, id) => {
-        const q = "SELECT * FROM tokens WHERE user_id = ?";
+        const q = "SELECT * FROM tokens WHERE users_id = ?";
         return await db.query(q, [id]);
     },
     insert_token: async (db, data) => {
-        const q = "INSERT INTO tokens (token, user_id) VALUES (?, ?)";
+        const q = "INSERT INTO tokens (token, users_id) VALUES (?, ?)";
         const result = await db.query(q, [
             data.token,
             data.user_id
@@ -31,7 +31,7 @@ module.exports = {
         else return false;
     },
     update_token: async (db, data) => {
-        const q = "UPDATE tokens SET token = ? WHERE user_id = ?";
+        const q = "UPDATE tokens SET token = ? WHERE users_id = ?";
         return await db.query(q, [
             data.token,
             data.user_id

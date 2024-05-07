@@ -9,7 +9,7 @@ module.exports = {
         return await db.query(q, [id]);
     },
     add: async (db, data) => {
-        const q = "INSERT INTO assets (title, user_id) VALUES (?, ?)";
+        const q = "INSERT INTO assets (title, users_id) VALUES (?, ?)";
         const result = await db.query(q, [data.title, data.id]);
         if (result) return result;
         else return false;

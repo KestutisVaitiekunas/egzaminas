@@ -25,10 +25,9 @@ const localStrategy = new LocalStrategy(
     { usernameField: 'email', passwordField: 'password', passReqToCallback: true },
     async (req, email, password, done) => {
         try {
-            console.log("before get user by email");
             let [user] = await UserModel.get_by_email(req.db, email);
-            console.log("after get user by email");
             user = user[0];
+            console.log(user);
             if (!user) {
                 // const data = { username: req.body.username, email, password };
                 return done(null, false, { message: 'User with this email does not exist.' });
@@ -46,7 +45,6 @@ const passport_authenticate = () => {
         passport.authenticate('register', {session: false}, async (err, user, info) => {
             const validation = validationResult(req);
             if (validation.isEmpty()) {
-                console.log(info);
                 if (err) return res.status(500).json({login_status: false, data: {message: info.message ?? "Internal server error"} });
                 if (!user) {
                     const data = { 

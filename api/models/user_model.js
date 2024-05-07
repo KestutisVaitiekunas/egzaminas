@@ -8,9 +8,9 @@ module.exports = {
         const q = "SELECT * FROM users WHERE id = ?";
         return await db.query(q, [id]);
     },
-    get_by_email: async (db, id) => {
+    get_by_email: async (db, email) => {
         const q = "SELECT * FROM users WHERE email = ? LIMIT 1";
-        return await db.query(q, [id]);
+        return await db.query(q, [email]);
     },
     add: async (db, data) => {
         const q = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
